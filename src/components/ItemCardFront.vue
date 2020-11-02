@@ -38,6 +38,7 @@
                         text
                         large
                         color="red lighten-2"
+                        @click="deleteItem()"
                     >Delete</v-btn>
                 </v-col>
             </v-row>
@@ -46,23 +47,40 @@
 </template>
 
 <script>
+import { mapActions} from 'vuex';
+
 export default {
     name: 'ItemCardFront',
     props: {
-        item: {
-            type: Object,
-            default: () => {},
+        id: {
+            type: Number,
+            default: 0,
+        },
+    },
+    computed: {
+        item() {
+            return this.$store.getters.getItemById(this.id);
+        }
+    },
+    methods: {
+        ...mapActions(['deleteItemAction']),
+        editItem() {
+            this.$emit('editClick');
+        },
+        async deleteItem() {
+            await this.deleteItemAction(this.id);
         },
     },
     data() {
         return {
+            //item: {...this.getItemById(this.id)}
         };
     },
-    methods: {
-        editItem() {
-            this.$emit('editClick');
-        },
+    created() {
+        //this.item = {...this.getItemById(this.id)};
     },
+    
+    
 }
 
 </script>

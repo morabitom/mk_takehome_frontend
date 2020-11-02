@@ -2,14 +2,13 @@
     <FlipCard :flipped='editing'>
         <template slot="front">
             <ItemCardFront
-                :item="item"
+                :id="id"
                 @editClick="editItem"
             />
         </template>
         <template slot="back">
             <ItemCardBack
-                :item="item"
-                @ItemUpdated="itemUpdated"
+                :id="id"
                 @ItemEditDone="editItemDone"
                 />
         </template>
@@ -24,9 +23,9 @@ import ItemCardBack from './ItemCardBack'
 export default {
     name: 'ItemCard',
     props: {
-        item: {
-            type: Object,
-            default: () => {},
+        id: {
+            type: Number,
+            default: 0,
         },
     },
     data() {
@@ -46,13 +45,7 @@ export default {
         editItemDone() {
             this.editing = false;
         },
-        itemUpdated() {
-            this.$emit('ItemUpdated');
-        }
     }
 }
-
-
-
 
 </script>

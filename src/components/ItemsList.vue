@@ -1,23 +1,33 @@
 <template>
     <v-row justify-center>
-        <v-col class="d-flex justify-center" cols="4" v-for="item in items" :key="item.Id">
+        <div class="notification is-info" v-show="message">{{ message }}</div>
+        <v-col class="d-flex justify-center" xl="4" md="6" sm="12" v-for="item in items" :key="item.Id">
             <ItemCard 
-                :item="item"
-                @updated="itemUpdated"
+                :id="item.Id"
             />
+            
         </v-col>
     </v-row>
 </template>
 
 <script>
-import {data} from '../dataAccess/Data';
 import ItemCard from './ItemCard';
+import {mapState, mapActions} from 'vuex';
 
 export default {
     name: 'ItemsList',
+    // props: {
+    //     nameFilter: {
+    //         type: String,
+    //         default: '',
+    //     },
+    //     maxFilter: {
+    //         type: Boolean,
+    //         default: false,
+    //     },
+    // },
     data() {
         return {
-            items: [],
             message: "",
         }                                                                                                                                                                                                                 
     },
@@ -28,17 +38,19 @@ export default {
         await this.getItems();
     },
     methods: {
+        ...mapActions(['getItemsAction']),
         async getItems() {
             this.message = 'Loading Items';
-            this.items = await data.getItems();
+            await this.getItemsAction();
             this.message = '';
         },
-        itemUpdated(newItem) {
-            const index = this.items.findIndex(i => i.Id === newItem.Id);
-            this.items.splice(index, 1, newItem);
-            this.items = [...this.items];
-        }
     },
+    computed: {
+        ...mapState(['items']),
+    },
+    watch: {
+
+    }
 
 }
 </script>                                                                                

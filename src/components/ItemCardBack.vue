@@ -17,6 +17,7 @@
                 <v-text-field
                     v-model="clonedItem.Name"
                     :counter="50"
+                    :rules="nameRules"
                     label="Name"
                     required
             ></v-text-field>
@@ -26,6 +27,7 @@
                     reverse
                     v-model="clonedItem.ExternalId"
                     :counter="10"
+                    :rules="idRules"
                     label="Id"
                     required
                 ></v-text-field>
@@ -39,6 +41,7 @@
             <v-text-field
                     v-model="clonedItem.Cost"
                     label="Cost"
+                    :rules="costRules"
                     required
                     prefix="$"
                 ></v-text-field>
@@ -54,6 +57,7 @@
                         text
                         color="green lighten-2"
                         large
+                        :disabled="!valid"
                         @click="saveChanges()">
                         Save
                     </v-btn>
@@ -79,32 +83,56 @@
 </template>
 
 <script>
-import {data} from '../dataAccess/Data'
+import { mapGetters, mapActions } from 'vuex';
+import {cloneDeep} from 'lodash';
 
 export default {
     name: 'ItemCardBack',
     props: {
-        item: {
-            type: Object,
-            default: () => {},
+        id: {
+            type: Number,
+            default: 0,
         },
     },
     data() {
         return {
-            clonedItem: { ...this.item },
+            clonedItem: {},
             apiWaiting: false,
+
+            valid: false,
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => v.length <= 50 || 'Name must be less than 10 characters',
+            ],
+            idRules: [
+                v => !!v || 'Id is required',
+                v => v.length <= 10 || 'Id must be valid',
+            ],
+            costRules: [
+                v => !!v || 'Cost is required',
+                v => /^\d{0,8}(\.\d{1,2})?$/.test(v) || 'Cost must be valid',
+            ],
         };
     },
+    async created() {
+        this.cloneItem();
+    },
+    computed: {
+        ...mapGetters(['getItemById']),
+    },
     methods: {
+        ...mapActions(['updateItemAction']),
         discardChanges() {
             this.$emit('ItemEditDone');
-            this.clonedItem = { ...this.item };
+            this.cloneItem();
+        },
+        cloneItem() {
+            this.clonedItem = cloneDeep(this.getItemById(this.id));
         },
         async saveChanges() {
             try {
                 this.apiWaiting = true;
-                const responseData = await data.updateItem(this.clonedItem);
-                this.$emit('ItemUpdated', responseData);
+                await this.updateItemAction(this.clonedItem);
                 this.$emit('ItemEditDone');
             }
             catch (ex) {

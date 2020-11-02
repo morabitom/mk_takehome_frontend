@@ -1,38 +1,15 @@
 <template>
     <v-app>
-      <v-app-bar
-      app
-      color="white"
-      flat
-    >
-      <v-container class="py-0 fill-height">
-        <v-row>
-          <v-col cols='4' offset-md='1'>
-            <v-icon >mdi-store</v-icon>
-            <v-toolbar-title>Inventor.io</v-toolbar-title>
-          </v-col>
-          <v-col cols='2' justify='center'>
-            <v-responsive max-width="260">
-              <v-autocomplete
-              filled
-              rounded
-            ></v-autocomplete>
-            </v-responsive>
-          </v-col>
-        </v-row>
-      </v-container>
-      </v-app-bar>
+      <AppBar/>
       <v-main class="grey lighten-3">
         <v-container>
-          <v-row>
-            
-            <v-sheet>
-            <v-col cols='8' offset-md="2">
-              <ItemsList/>  
-            </v-col>
-            
-            </v-sheet>
-          </v-row>      
+          <v-sheet style="border: 3px solid red">
+            <v-row style="border: 3px solid green">
+              <v-col cols='8' offset="2" style="border: 3px solid green">
+                <ItemsList/>  
+              </v-col>
+            </v-row>     
+           </v-sheet> 
         </v-container>
       </v-main>
     </v-app>
@@ -40,16 +17,16 @@
 
 <script>
 import ItemsList from './components/ItemsList';
+import AppBar from './components/AppBar';
 
 export default {
   name: 'App',
 
   components: {
     ItemsList,
+    AppBar,
   },
-
   data: () => ({
-    //
   }),
 };
 </script>
@@ -58,4 +35,13 @@ export default {
 /* .container {
   max-width: 1200px !important;
 } */
+  /* .container {
+    border: 1px solid green;
+  }
+  .row {
+    border: 1px solid red;
+  }
+  .col {
+    border: 1px solid blue;
+  } */
 </style>
