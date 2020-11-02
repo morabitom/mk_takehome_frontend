@@ -56,7 +56,7 @@ export default {
 </script>                                                                                
 
 <style scoped>
-  .container {
+  /* .container {
     border: 1px solid green;
   }
   .row {
@@ -64,5 +64,5 @@ export default {
   }
   .col {
     border: 1px solid blue;
-  }
+  } */
 </style>

@@ -51,6 +51,12 @@ export default new Vuex.Store({
         state.selectItems = [...state.selectItems.filter(i => i !== oldItem.Name)];
       }
     },
+    createEmptyItem (state) {
+      state.items.unshift({ Id: 0, ExternalId: '', Name: '', Cost: 0});
+    },
+    removeEmptyItem (state) {
+      state.items = [...state.items.filter(i => i.Id !== 0)];
+    },
   },
   actions: {
     async getItemsAction({ commit }, { nameFilter, maxFilter } = {nameFilter: '', maxFilter: false}) {
@@ -72,6 +78,7 @@ export default new Vuex.Store({
   },
   getters: {
     getItemById: state => id => state.items.find(i => i.Id === id),
+    getItemByExternalId: state => externalId => state.items.find(i => i.ExternalId === externalId),
     getDistinctItemNames: state => [...new Set(state.items.map(x => x.Name))],
   },
   modules: {

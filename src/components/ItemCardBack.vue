@@ -15,7 +15,7 @@
             <v-row>
             <v-col cols="8">
                 <v-text-field
-                    v-model="clonedItem.Name"
+                    v-model="privateItem.Name"
                     :counter="50"
                     :rules="nameRules"
                     label="Name"
@@ -25,7 +25,7 @@
             <v-col cols="4" align="right">
                 <v-text-field
                     reverse
-                    v-model="clonedItem.ExternalId"
+                    v-model="privateItem.ExternalId"
                     :counter="10"
                     :rules="idRules"
                     label="Id"
@@ -39,7 +39,7 @@
             <v-row>
                 <v-col cols="8">
             <v-text-field
-                    v-model="clonedItem.Cost"
+                    v-model="privateItem.Cost"
                     label="Cost"
                     :rules="costRules"
                     required
@@ -96,7 +96,7 @@ export default {
     },
     data() {
         return {
-            clonedItem: {},
+            privateItem: {},
             apiWaiting: false,
 
             valid: false,
@@ -115,25 +115,40 @@ export default {
         };
     },
     async created() {
-        this.cloneItem();
+        this.createPrivateItem();
     },
     computed: {
         ...mapGetters(['getItemById']),
+        newItem() {
+            return (this.id === 0);
+        },
     },
     methods: {
-        ...mapActions(['updateItemAction']),
+        ...mapActions(['updateItemAction', 'addItemAction']),
         discardChanges() {
             this.$emit('ItemEditDone');
-            this.cloneItem();
+            if (this.newItem) {
+                console.log('in state');
+                this.$store.commit('removeEmptyItem');
+            }
+            else {
+                this.createPrivateItem();
+            }
         },
-        cloneItem() {
-            this.clonedItem = cloneDeep(this.getItemById(this.id));
+        createPrivateItem() {
+                this.privateItem = cloneDeep(this.getItemById(this.id));
         },
         async saveChanges() {
             try {
                 this.apiWaiting = true;
-                await this.updateItemAction(this.clonedItem);
+                if (this.newItem) {
+                    await this.addItemAction(this.privateItem);
+                }
+                else {
+                    await this.updateItemAction(this.privateItem);
+                }
                 this.$emit('ItemEditDone');
+                this.$store.commit('removeEmptyItem');
             }
             catch (ex) {
                 alert(ex);

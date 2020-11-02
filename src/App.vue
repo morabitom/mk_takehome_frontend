@@ -3,9 +3,9 @@
       <AppBar/>
       <v-main class="grey lighten-3">
         <v-container>
-          <v-sheet style="border: 3px solid red">
-            <v-row style="border: 3px solid green">
-              <v-col cols='8' offset="2" style="border: 3px solid green">
+          <v-sheet>
+            <v-row>
+              <v-col cols='8' offset="2">
                 <ItemsList/>  
               </v-col>
             </v-row>     

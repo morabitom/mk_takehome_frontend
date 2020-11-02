@@ -45,7 +45,10 @@ export default {
         editItemDone() {
             this.editing = false;
         },
-    }
+    },
+    created() {
+        if (this.id === 0) this.editing = true;
+    },
 }
 
 </script>

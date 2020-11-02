@@ -35,17 +35,16 @@ const deleteItem = async function(id) {
 
 const addItem = async function(item) {
     const config = {
-        method: 'insert',
+        method: 'post',
         url: `${API}Item`,
         headers: { 
           'Content-Type': 'application/json',
         },
-        data : JSON.stringify(item),
+        data : JSON.stringify({ExternalId:item.ExternalId, Name:item.Name, Cost:item.Cost}),
     };
 
     const response = await axios(config);
-
-    if (response.status !== 200) throw Error(response.message);
+    if (response.status !== 201) throw Error(response.message);
     return response.data;
 };
 
