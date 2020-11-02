@@ -1,0 +1,1 @@
+export const API = 'https://mk-takehome-api.azurewebsites.net/api/';
