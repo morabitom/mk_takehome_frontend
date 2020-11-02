@@ -24,6 +24,11 @@ const updateItem = async function(item) {
     const response = await axios(config);
 
     if (response.status !== 200) throw Error(response.message);
+    if (!Array.isArray(response.data)) {
+        console.log('is not array');
+        return [response.data];
+    }
+    console.log('is array');
     return response.data;
 };
 

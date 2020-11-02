@@ -13,7 +13,8 @@ export default new Vuex.Store({
   },
   mutations: {
     [GET_ITEMS](state, items) {
-      state.items = items;
+      const newItems = [].concat(items);
+      state.items = newItems;
 
       //handle updating select dropdown values 
       if (!state.selectItems.length) {
