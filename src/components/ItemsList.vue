@@ -16,16 +16,6 @@ import {mapState, mapActions} from 'vuex';
 
 export default {
     name: 'ItemsList',
-    // props: {
-    //     nameFilter: {
-    //         type: String,
-    //         default: '',
-    //     },
-    //     maxFilter: {
-    //         type: Boolean,
-    //         default: false,
-    //     },
-    // },
     data() {
         return {
             message: "",
@@ -53,16 +43,4 @@ export default {
     }
 
 }
-</script>                                                                                
-
-<style scoped>
-  /* .container {
-    border: 1px solid green;
-  }
-  .row {
-    border: 1px solid red;
-  }
-  .col {
-    border: 1px solid blue;
-  } */
-</style>
+</script>

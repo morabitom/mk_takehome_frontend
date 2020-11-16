@@ -9,12 +9,13 @@
               <v-col>
                   <v-row align="start" no-gutters>
                       <v-col>
-                        <v-toolbar-title>Inventor.io</v-toolbar-title>
+                        <v-toolbar-title>My Inventory</v-toolbar-title>
                       </v-col>
                       <v-col>
                         <v-btn
                             elevation="2"
                             @click="newItem()"
+                            :disabled="newItemExists"
                             color="success"
                             >
                             <v-icon left>
@@ -61,12 +62,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'AppBar',
     computed: {
         ...mapState(['selectItems']),
+        ...mapGetters(['getItemById']),
+        newItemExists() {
+          return (this.getItemById(0) != null);
+        }
     },
 
     data: () => ({
@@ -78,21 +83,16 @@ export default {
         async search() {
             await this.getItemsAction( { nameFilter: this.select, maxFilter: this.maxOnly } );
         },
-        newItem() {
+        async newItem() {
+            await this.resetFilterState();
             this.$store.commit('createEmptyItem');
+            
+        },
+        async resetFilterState() {
+            this.select = '';
+            this.maxOnly = false;
+            await this.getItemsAction( {nameFilter: this.select, maxFilter: this. maxOnly});
         }
     }
 }
 </script>
-
-<style scoped>
- /* .container {
-    border: 1px solid green;
-  }
-  .row {
-    border: 1px solid red;
-  }
-  .col {
-    border: 1px solid blue;
-  } */
-</style>

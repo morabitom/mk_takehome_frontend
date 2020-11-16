@@ -1,19 +1,26 @@
 <template>
     <v-card 
+        :loading="apiWaiting"
         elevation="10"
         class="mt-0 pa-0"
         min-height="170"
-        min-width="300"
+        width="300"
     >
+        <template slot="progress">
+            <v-progress-linear
+                indeterminate
+                color="cyan"
+            ></v-progress-linear>
+        </template>
+
         <v-form
             ref="form"
             v-model="valid"
         >
-            
-            
-        <v-card-title class="pt-0 pb-0">
+
+        <v-card-title class="pb-0">
             <v-row>
-            <v-col cols="8">
+            <v-col cols="8" class="py-0 my-0">
                 <v-text-field
                     v-model="privateItem.Name"
                     :counter="50"
@@ -22,7 +29,7 @@
                     required
             ></v-text-field>
             </v-col>
-            <v-col cols="4" align="right">
+            <v-col cols="4" align="right" class="py-0 my-0">
                 <v-text-field
                     reverse
                     v-model="privateItem.ExternalId"
@@ -36,8 +43,6 @@
         </v-card-title>
 
         <v-card-text class="pl-4 py-0 pt-0">
-            <v-row>
-                <v-col cols="8">
             <v-text-field
                     v-model="privateItem.Cost"
                     label="Cost"
@@ -45,14 +50,9 @@
                     required
                     prefix="$"
                 ></v-text-field>
-                </v-col>
-                <v-spacer></v-spacer>
-            </v-row>
         </v-card-text>
 
-        <v-card-actions class="pb-0 pa-0">
-            <v-row no-gutters>
-                <v-col cols="4"  align="center">
+        <v-card-actions class="py-0">
                     <v-btn
                         text
                         color="green lighten-2"
@@ -61,24 +61,16 @@
                         @click="saveChanges()">
                         Save
                     </v-btn>
-                </v-col>
                 <v-spacer></v-spacer>
-                <v-col cols="4"  align="center">
                     <v-btn 
                         text
                         large
                         color="yellow darken-2"
                         @click="discardChanges()"
                     >Discard</v-btn>
-                </v-col>
-            </v-row>
         </v-card-actions>
         </v-form>
-        <v-progress-linear
-            indeterminate
-            color="cyan"
-            :active="apiWaiting"
-        ></v-progress-linear>
+        
     </v-card>
 </template>
 
@@ -110,7 +102,7 @@ export default {
             ],
             costRules: [
                 v => !!v || 'Cost is required',
-                v => /^\d{0,8}(\.\d{1,2})?$/.test(v) || 'Cost must be valid',
+                v => /^\d{0,6}(\.(\d{1,2})?)?$/.test(v) || 'Cost must be <1,000,000',
             ],
         };
     },
@@ -128,7 +120,6 @@ export default {
         discardChanges() {
             this.$emit('ItemEditDone');
             if (this.newItem) {
-                console.log('in state');
                 this.$store.commit('removeEmptyItem');
             }
             else {
